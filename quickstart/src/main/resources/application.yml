@@ -1,0 +1,4 @@
+rocketmq:
+    name-server: 192.168.206.219:9876
+logging:
+    config: classpath:log4j2.xml
