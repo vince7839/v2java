@@ -1,0 +1,10 @@
+server:
+    port: 8989
+
+mq:
+  host: 127.0.0.1:9876
+  proxy: 10.23.1.117:8081
+  topic: TopicTest
+
+mock:
+  job: true

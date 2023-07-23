@@ -9,6 +9,7 @@ import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.apis.ClientConfiguration;
@@ -19,16 +20,20 @@ import org.apache.rocketmq.client.apis.consumer.SimpleConsumer;
 import org.apache.rocketmq.client.apis.message.MessageView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 /**
+ * 5.0版本SDK消费代码
+ *
  * @author liaowenxing 2023/7/14
  **/
 @Component
 @Slf4j
-public class TaskConsumer {
+@ConditionalOnProperty(name="mq.new-consumer",havingValue = "true")
+public class TaskSimpleConsumer {
 
     @Autowired
     @Qualifier("consumerPoll")
@@ -43,8 +48,8 @@ public class TaskConsumer {
     @Scheduled(fixedRate = 1000)
     @SneakyThrows
     public void pull() {
-        List<MessageView> list = simpleConsumer.receive(100,Duration.ofSeconds(10));
-        log.info("pull msg size：{}",list.size());
+        List<MessageView> list = simpleConsumer.receive(100, Duration.ofSeconds(30));
+        log.info("simple consumer pull msg size：{}", list.size());
     }
 
     @Bean("consumerPoll")
@@ -70,7 +75,7 @@ public class TaskConsumer {
 
     @Bean
     @SneakyThrows
-    public SimpleConsumer simpleConsumer(){
+    public SimpleConsumer simpleConsumer() {
         // 消费示例：使用 SimpleConsumer 消费普通消息，主动获取消息处理并提交。
         ClientServiceProvider provider = ClientServiceProvider.loadService();
         String topic = "TopicTest";
@@ -84,7 +89,7 @@ public class TaskConsumer {
                 // 设置预绑定的订阅关系。
                 .setSubscriptionExpressions(Collections.singletonMap(topic, filterExpression))
                 // 设置从服务端接受消息的最大等待时间
-                .setAwaitDuration(Duration.ofSeconds(1))
+                .setAwaitDuration(Duration.ofSeconds(5))
                 .build();
         return simpleConsumer;
     }

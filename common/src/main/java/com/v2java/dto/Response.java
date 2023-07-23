@@ -16,4 +16,8 @@ public class Response<T> {
     public static Response success(Object data) {
         return new Response("200", data);
     }
+
+    public static Response success() {
+        return new Response("200", null);
+    }
 }

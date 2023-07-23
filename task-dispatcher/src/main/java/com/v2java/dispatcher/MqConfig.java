@@ -13,4 +13,5 @@ import org.springframework.context.annotation.Configuration;
 public class MqConfig {
     private String host;
     private String proxy;
+    private String topic;
 }

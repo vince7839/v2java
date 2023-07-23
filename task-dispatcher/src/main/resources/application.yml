@@ -3,4 +3,8 @@ server:
 
 mq:
     host: 192.168.206.219:9876
-    proxy: 192.168.206.219:8080
+    proxy: 192.168.206.219:8081
+
+mock:
+    job: true
+    rpa.ount: 10
