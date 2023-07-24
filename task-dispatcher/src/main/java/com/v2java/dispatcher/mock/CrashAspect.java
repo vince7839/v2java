@@ -13,7 +13,7 @@ import org.aspectj.lang.annotation.Pointcut;
 @Slf4j
 public class CrashAspect {
 
-    @Pointcut("execution(* com.v2java.dispatcher.mock.* (*))")
+    @Pointcut("execution(* com.v2java.dispatcher.mock.MockRpa.*(..))")
     public void pointcut(){
 
     }

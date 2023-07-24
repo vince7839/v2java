@@ -6,6 +6,7 @@ import com.v2java.dispatcher.rpa.Rpa;
 import com.v2java.dispatcher.rpa.RpaService;
 import com.v2java.util.RedisLockUtil;
 import java.util.Objects;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -55,6 +56,10 @@ public class Dispatcher {
             unlock(mutex, null);
             return;
         }
+
+        //随机产生一个0～1000毫秒的延迟，让后启动的线程有机会先执行，制造并发分配的场景
+        Thread.sleep(new Random().nextInt(1000));
+
         //抢占RPA分配锁，防止在还未分配成功时，rpa心跳又将自己放入待分配列表
         String rpaLockKey = RPA_LOCK_PREFIX + rpa.getRpaId();
         boolean rpaLock = redisLockUtil.tryLock(rpaLockKey, 5, TimeUnit.SECONDS);
@@ -66,6 +71,8 @@ public class Dispatcher {
         boolean success = false;
         try {
             success = rpa.sendTask(taskPO);
+            taskMapper.updateStatus(taskPO.getId(),TaskStatusEnum.STATUS_DISPATCH_SUCCESS.getCode()
+                    ,"下发到RPA-"+rpa.getRpaId());
         } catch (Exception e) {
             log.error("下发任务失败", e);
         } finally {

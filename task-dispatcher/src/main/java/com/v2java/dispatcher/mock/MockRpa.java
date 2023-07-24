@@ -1,16 +1,20 @@
 package com.v2java.dispatcher.mock;
 
 import com.v2java.dispatcher.dto.RpaHeartbeatDTO;
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.Random;
+import com.v2java.dto.Response;
+import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.Random;
+
 @RequiredArgsConstructor
+@Data
 public class MockRpa implements Runnable {
 
     @NonNull
@@ -34,8 +38,7 @@ public class MockRpa implements Runnable {
 
     Long taskId;
 
-    @Autowired
-    RestTemplate restTemplate;
+    RestTemplate restTemplate = new RestTemplate(new SimpleClientHttpRequestFactory());
 
     @Override
     @SneakyThrows
@@ -46,7 +49,7 @@ public class MockRpa implements Runnable {
         }
         if (status == STATUS_BUSY) {
             Duration taskDuration = Duration.between(taskStartTime, LocalDateTime.now());
-            if (taskDuration.getSeconds() >= taskUseSeconds) {
+            if (taskDuration.getSeconds() > taskUseSeconds) {
                 callback();
             }
         }
@@ -56,13 +59,13 @@ public class MockRpa implements Runnable {
         RpaHeartbeatDTO heartbeatDTO = new RpaHeartbeatDTO();
         heartbeatDTO.setRpaId(rpaId);
         heartbeatDTO.setStatus(status+"");
-        restTemplate.postForObject("http://localhost:8989/rpa/heartbeat",heartbeatDTO,null);
+        restTemplate.postForObject("http://localhost:8989/rpa/heartbeat",heartbeatDTO, Response.class);
         latestHeartbeat = LocalDateTime.now();
     }
 
     public void accept(Long taskId) {
         //模拟执行任务，分配时已经决定每个任务耗时
-        taskUseSeconds = new Random().nextInt(20);
+        taskUseSeconds = new Random().nextInt(10);
         taskStartTime = LocalDateTime.now();
         status = STATUS_BUSY;
         this.taskId = taskId;

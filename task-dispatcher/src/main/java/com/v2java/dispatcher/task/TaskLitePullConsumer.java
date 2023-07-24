@@ -49,7 +49,7 @@ public class TaskLitePullConsumer implements Runnable {
             if (CollectionUtils.isEmpty(list)){
                 continue;
             }
-            log.info("lite pull msg size:{}", list.size());
+            //log.info("lite pull msg size:{}", list.size());
             taskService.process(list);
             litePullConsumer.commitSync();
         }

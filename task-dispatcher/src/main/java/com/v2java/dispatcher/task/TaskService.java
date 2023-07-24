@@ -49,7 +49,7 @@ public class TaskService implements RejectedExecutionHandler {
         request.setFlowNum(flowNum);
         String msg = JSON.toJSONString(request);
         messageSender.sendToMq(msg);
-        log.info("commitTask:{}", msg);
+        //log.info("commitTask:{}", msg);
         return request.getFlowNum();
     }
 

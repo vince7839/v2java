@@ -2,11 +2,10 @@ package com.v2java.dispatcher.task;
 
 import com.v2java.dispatcher.dao.TaskPO;
 import com.v2java.util.SpringUtil;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.apache.rocketmq.common.message.MessageExt;
+
+import java.util.Random;
 
 /**
  * 因为Runable不交给bean管理，所以内部传入一个bean执行，业务方法封装到其中

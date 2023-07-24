@@ -44,8 +44,8 @@ public class RpaService {
             String rpaInfo = redisTemplate.opsForValue().get(rpaInfoKey);
             valid = !StringUtils.isEmpty(rpaInfo);
             if (valid) {
-                RpaHeartbeatDTO heartbeatDTO = JSON.parseObject(rpaInfo,RpaHeartbeatDTO.class);
-                rpa = new Rpa(heartbeatDTO.getRpaId());
+                //RpaHeartbeatDTO heartbeatDTO = JSON.parseObject(rpaInfo,RpaHeartbeatDTO.class);
+                rpa = new Rpa(rpaId);
             }
         } while (!valid && retry < 5);
         return rpa;

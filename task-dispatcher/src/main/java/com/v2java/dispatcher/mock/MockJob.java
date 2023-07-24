@@ -1,12 +1,11 @@
 package com.v2java.dispatcher.mock;
 
-import com.v2java.dispatcher.TaskCommitResponse;
 import com.v2java.dispatcher.TaskRequest;
+import com.v2java.dto.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -30,10 +29,10 @@ public class MockJob {
     public void mockProduceTask(){
         TaskRequest request = new TaskRequest();
         request.setTaskType("1");
-        ResponseEntity<TaskCommitResponse> entity = restTemplate.postForEntity(
+        Response response = restTemplate.postForObject(
                 "http://localhost:8989/task/commit",request
-                , TaskCommitResponse.class);
-        log.info("task commit res:{}",entity.getBody());
+                , Response.class);
+        //log.info("task commit res:{}",response);
     }
 
     @Bean

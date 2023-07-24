@@ -3,10 +3,12 @@ package com.v2java.util;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Component;
 
 /**
  * @author liaowenxing 2023/7/24
  **/
+@Component
 public class SpringUtil implements ApplicationContextAware {
 
     public static ApplicationContext applicationContext = null;

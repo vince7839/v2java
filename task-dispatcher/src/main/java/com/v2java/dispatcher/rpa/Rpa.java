@@ -27,7 +27,7 @@ public class Rpa {
             mockRpa.accept(taskPO.getId());
             return true;
         }catch (Exception e){
-            log.error("",e);
+            log.error("任务下发至RPA异常",e);
             return false;
         }
     }

@@ -59,7 +59,7 @@ public class ResourcePool implements Runnable {
             int i = 0;
             @Override
             public Thread newThread(Runnable r) {
-                Thread thread = new Thread();
+                Thread thread = new Thread(r);
                 thread.setName("rpa-mock-thread-"+i++);
                 return thread;
             }

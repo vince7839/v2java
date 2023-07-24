@@ -14,6 +14,7 @@ public enum TaskStatusEnum {
     STATUS_PROCESS_ERROR("2","处理失败"),
     STATUS_DISPATCH_FAIL("3","分配失败"),
     STATUS_EXEC_FAIL("4","执行失败"),
+    STATUS_DISPATCH_SUCCESS("5","下发成功"),
     ;
     private String code;
     private String msg;
