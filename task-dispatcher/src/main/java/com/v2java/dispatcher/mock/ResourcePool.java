@@ -1,16 +1,19 @@
 package com.v2java.dispatcher.mock;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.PostConstruct;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.*;
 
 @Component
 @Data
@@ -19,7 +22,7 @@ public class ResourcePool implements Runnable {
     @Value("${mock.rpa.count}")
     Integer RPA_MOCK_COUNT;
 
-    List<MockRpa> rpaList = new ArrayList<>();
+    Map<String,MockRpa> rpaMap = new HashMap<>();
 
     @Autowired
     @Qualifier("rpaThreadPool")
@@ -29,16 +32,23 @@ public class ResourcePool implements Runnable {
     @PostConstruct
     public void init() {
         for (int i = 0; i < RPA_MOCK_COUNT; i++) {
-            rpaList.add(new MockRpa());
+            String rpaId = String.valueOf(i);
+            MockRpa mockRpa = new MockRpa(rpaId);
+            rpaMap.put(rpaId,mockRpa);
         }
         new Thread(this).start();
+    }
+
+
+    public MockRpa getMock(String rpaId){
+        return rpaMap.get(rpaId);
     }
 
 
     @Override
     public void run() {
         while (true) {
-            rpaList.forEach(i -> executorService.execute(i));
+            rpaMap.values().forEach(i -> executorService.execute(i));
         }
     }
 
@@ -47,7 +57,6 @@ public class ResourcePool implements Runnable {
         return new ThreadPoolExecutor(3, 3, 0, TimeUnit.SECONDS
                 , new ArrayBlockingQueue<>(100), new ThreadFactory() {
             int i = 0;
-
             @Override
             public Thread newThread(Runnable r) {
                 Thread thread = new Thread();

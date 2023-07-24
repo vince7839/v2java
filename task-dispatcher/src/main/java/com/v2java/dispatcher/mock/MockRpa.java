@@ -1,14 +1,20 @@
 package com.v2java.dispatcher.mock;
 
-import lombok.SneakyThrows;
-
+import com.v2java.dispatcher.dto.RpaHeartbeatDTO;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Random;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.client.RestTemplate;
 
+@RequiredArgsConstructor
 public class MockRpa implements Runnable {
 
-
+    @NonNull
+    private String rpaId;
     /**
      * 状态空闲
      */
@@ -26,6 +32,11 @@ public class MockRpa implements Runnable {
 
     int taskUseSeconds = 0;
 
+    Long taskId;
+
+    @Autowired
+    RestTemplate restTemplate;
+
     @Override
     @SneakyThrows
     public void run() {
@@ -42,27 +53,28 @@ public class MockRpa implements Runnable {
     }
 
     public void heartbeat() {
-        new Crashable("block") {
-            @Override
-            void doSth() {
-                latestHeartbeat = LocalDateTime.now();
-            }
-        }.happen();
+        RpaHeartbeatDTO heartbeatDTO = new RpaHeartbeatDTO();
+        heartbeatDTO.setRpaId(rpaId);
+        heartbeatDTO.setStatus(status+"");
+        restTemplate.postForObject("http://localhost:8989/rpa/heartbeat",heartbeatDTO,null);
+        latestHeartbeat = LocalDateTime.now();
     }
 
-    public void dispatch() {
+    public void accept(Long taskId) {
         //模拟执行任务，分配时已经决定每个任务耗时
         taskUseSeconds = new Random().nextInt(20);
         taskStartTime = LocalDateTime.now();
         status = STATUS_BUSY;
+        this.taskId = taskId;
     }
 
     public void callback() {
-        new Crashable("crash"){
+        new Crashable("crash") {
             @Override
             void doSth() {
                 status = STATUS_IDLE;
                 taskStartTime = null;
+                taskId = null;
             }
         }.happen();
     }

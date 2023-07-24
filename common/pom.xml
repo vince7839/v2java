@@ -15,4 +15,10 @@
 <!--    <version>${module.version}</version>-->
     <version>1.0</version>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson</artifactId>
+        </dependency>
+    </dependencies>
 </project>

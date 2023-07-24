@@ -1,5 +1,6 @@
-package com.v2java.dispatcher;
+package com.v2java.dispatcher.task;
 
+import com.v2java.dispatcher.MqConfig;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.List;

@@ -1,7 +1,7 @@
-package com.v2java.dispatcher;
+package com.v2java.dispatcher.task;
 
+import com.v2java.dispatcher.TaskRequest;
 import com.v2java.dto.Response;
-import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
