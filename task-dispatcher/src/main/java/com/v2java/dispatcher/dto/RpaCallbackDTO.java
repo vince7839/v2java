@@ -8,4 +8,8 @@ public class RpaCallbackDTO {
     private String flowNum;
 
     private String status;
+
+    private String rpaId;
+
+    private String mutex;
 }

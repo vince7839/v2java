@@ -19,6 +19,7 @@ public class Rpa {
     private MockRpa mockRpa;
 
     public Rpa(String rpaId){
+        this.rpaId = rpaId;
         mockRpa = SpringUtil.getBean(ResourcePool.class).getMock(rpaId);
     }
 

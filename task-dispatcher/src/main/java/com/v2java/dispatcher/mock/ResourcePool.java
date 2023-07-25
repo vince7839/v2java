@@ -1,5 +1,6 @@
 package com.v2java.dispatcher.mock;
 
+import com.v2java.util.SpringUtil;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -12,6 +13,8 @@ import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cglib.proxy.Enhancer;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -33,9 +36,11 @@ public class ResourcePool implements Runnable {
     public void init() {
         for (int i = 0; i < RPA_MOCK_COUNT; i++) {
             String rpaId = String.valueOf(i);
-            MockRpa mockRpa = new MockRpa(rpaId);
+            MockRpa mockRpa = (MockRpa) Enhancer.create(MockRpa.class,new CrashInterceptor());
+            mockRpa.setRpaId(rpaId);
             rpaMap.put(rpaId,mockRpa);
         }
+
         new Thread(this).start();
     }
 

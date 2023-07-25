@@ -1,33 +1,17 @@
 package com.v2java.dispatcher.mock;
 
-import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import java.util.Random;
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Crashable {
 
-@AllArgsConstructor
-abstract public class Crashable {
+    String type() default "random";
 
-    private String type;
+    int ratio() default 5;
 
-    abstract void doSth();
-
-    public void happen(){
-        crash();
-        doSth();
-    }
-
-    @SneakyThrows
-    public void crash(){
-        int num = new Random().nextInt(100);
-        boolean crash = num < 10;
-        if (!crash){
-            return;
-        }
-        if ("crash".equals(type)){
-            throw new RuntimeException();
-        }else if ("block".equals(type)){
-            Thread.sleep(1000*10);
-        }
-    }
+    int maxBlock() default 1000;
 }
