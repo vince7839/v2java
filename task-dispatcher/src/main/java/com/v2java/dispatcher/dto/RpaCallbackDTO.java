@@ -12,4 +12,8 @@ public class RpaCallbackDTO {
     private String rpaId;
 
     private String mutex;
+
+    private String result;
+
+    private String area;
 }

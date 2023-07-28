@@ -14,30 +14,34 @@ import org.springframework.cglib.proxy.MethodProxy;
 @Slf4j
 public class CrashInterceptor implements MethodInterceptor {
 
+    boolean enableCrash = false;
+
     @Override
     public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy)
             throws Throwable {
-        Crashable crashable = method.getAnnotation(Crashable.class);
-        if (Objects.nonNull(crashable)){
-            int num = new Random().nextInt(100);
-            boolean happen = num < crashable.ratio();
-            if (happen){
-                happen(crashable);
+        if (enableCrash) {
+            Crashable crashable = method.getAnnotation(Crashable.class);
+            if (Objects.nonNull(crashable)) {
+                int num = new Random().nextInt(100);
+                boolean happen = num < crashable.ratio();
+                if (happen) {
+                    happen(crashable);
+                }
             }
         }
-        return methodProxy.invokeSuper(o,objects);
+        return methodProxy.invokeSuper(o, objects);
     }
 
     @SneakyThrows
-    private void happen(Crashable crashable){
+    private void happen(Crashable crashable) {
         String type = crashable.type();
-        if ("random".equals(crashable.type())){
+        if ("random".equals(crashable.type())) {
             int index = new Random().nextInt(2);
-            type = new String[]{"exception","block"}[index];
+            type = new String[]{"exception", "block"}[index];
         }
-        if ("exception".equals(type)){
+        if ("exception".equals(type)) {
             throw new RuntimeException();
-        }else if("block".equals(type)){
+        } else if ("block".equals(type)) {
             Thread.sleep(new Random().nextInt(crashable.maxBlock()));
         }
     }

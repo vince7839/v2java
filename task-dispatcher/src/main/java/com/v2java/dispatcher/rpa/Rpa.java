@@ -25,7 +25,7 @@ public class Rpa {
 
     public boolean sendTask(TaskPO taskPO){
         try {
-            mockRpa.accept(taskPO.getId());
+            mockRpa.accept(taskPO);
             return true;
         }catch (Exception e){
             log.error("任务下发至RPA异常",e);

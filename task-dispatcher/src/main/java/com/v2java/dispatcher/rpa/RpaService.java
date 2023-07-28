@@ -5,6 +5,7 @@ import com.v2java.dispatcher.dto.RpaCallbackDTO;
 import com.v2java.dispatcher.dto.RpaHeartbeatDTO;
 import com.v2java.dispatcher.mock.MockRpa;
 import com.v2java.dispatcher.task.Dispatcher;
+import com.v2java.dispatcher.task.SlidingWindowCounter;
 import com.v2java.dispatcher.task.TaskService;
 import com.v2java.util.RedisLockUtil;
 import java.util.concurrent.TimeUnit;
@@ -24,6 +25,8 @@ public class RpaService {
     StringRedisTemplate redisTemplate;
     @Autowired
     RedisLockUtil redisLockUtil;
+    @Autowired
+    SlidingWindowCounter counter;
 
     public void heartbeat(RpaHeartbeatDTO heartbeatDTO) {
         boolean lock = redisLockUtil.tryLock(Dispatcher.RPA_LOCK_PREFIX + heartbeatDTO.getRpaId()
@@ -42,7 +45,8 @@ public class RpaService {
         if (!StringUtils.isEmpty(callbackDTO.getMutex())) {
             redisLockUtil.unlock(Dispatcher.TASK_LOCK_PREFIX + callbackDTO.getMutex());
         }
-        //TODO 统计失败率
+        //滑动窗口统计失败率
+        counter.update(callbackDTO);
     }
 
     public Rpa dispatchRpa() {

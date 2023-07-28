@@ -1,6 +1,8 @@
 package com.v2java.dispatcher.mock;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.v2java.dispatcher.dao.TaskPO;
+import com.v2java.dispatcher.dto.RpaCallbackDTO;
 import com.v2java.dispatcher.dto.RpaHeartbeatDTO;
 import com.v2java.dto.Response;
 import java.time.Duration;
@@ -37,7 +39,7 @@ public class MockRpa implements Runnable {
 
     int taskUseSeconds = 0;
 
-    Long taskId;
+    TaskPO currentTask;
 
     @JsonIgnore
     RestTemplate restTemplate = new RestTemplate(new SimpleClientHttpRequestFactory());
@@ -68,18 +70,26 @@ public class MockRpa implements Runnable {
     }
 
     @Crashable(type = "block",maxBlock = 5000)
-    public void accept(Long taskId) {
+    public void accept(TaskPO task) {
         //模拟执行任务，分配时已经决定每个任务耗时
         taskUseSeconds = new Random().nextInt(10);
         taskStartTime = LocalDateTime.now();
         status = STATUS_BUSY;
-        this.taskId = taskId;
+        this.currentTask = task;
     }
 
     @Crashable
     public void callback() {
+        RpaCallbackDTO callbackDTO = new RpaCallbackDTO();
+        callbackDTO.setFlowNum(currentTask.getFlowNum());
+        //随机生成一个执行结果 0：成功 1：网络原因失败 2：其他失败
+        callbackDTO.setResult(new Random().nextInt(3)+"");
+        //先随机写死一个地区
+        callbackDTO.setArea("110000");
+        restTemplate.postForObject("http://localhost:8989/rpa/callback"
+                ,callbackDTO,Response.class);
         status = STATUS_IDLE;
         taskStartTime = null;
-        taskId = null;
+        currentTask = null;
     }
 }

@@ -3,7 +3,7 @@ package com.v2java.dispatcher.rpa;
 import com.v2java.dispatcher.dto.RpaCallbackDTO;
 import com.v2java.dispatcher.dto.RpaHeartbeatDTO;
 import com.v2java.dispatcher.mock.ResourcePool;
-import com.v2java.dispatcher.rpa.RpaService;
+import com.v2java.dispatcher.task.SlidingWindowCounter;
 import com.v2java.dto.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,9 +43,10 @@ public class RpaController {
         return Response.success(resourcePool.getRpaMap());
     }
 
-    @GetMapping("/rpa/test")
-    public Object test(){
-        Rpa rpa = new Rpa(null);
-        return String.valueOf(rpa.getRpaId());
+    @GetMapping("/rpa/ratio")
+    public Response ratio(String area){
+        Object value = redisTemplate.opsForValue()
+                .get(SlidingWindowCounter.KEY_FAIL_RATIO_PREFIX+area);
+        return Response.success(value);
     }
 }
