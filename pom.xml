@@ -8,6 +8,8 @@
         <module>task-dispatcher</module>
         <module>quickstart</module>
         <module>common</module>
+        <module>fs-router</module>
+        <module>fs-worker</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -85,7 +87,11 @@
 
         <!-- https://mvnrepository.com/artifact/org.apache.rocketmq/rocketmq-spring-boot-starter -->
 
-
+<!--        <dependency>-->
+<!--            <groupId>com.example</groupId>-->
+<!--            <artifactId>common</artifactId>-->
+<!--            <version>1.0</version>-->
+<!--        </dependency>-->
 
     </dependencies>
 
@@ -103,6 +109,12 @@
                 <type>pom</type>
                 <scope>import</scope>
                 <version>${module.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.example</groupId>
+                <artifactId>common</artifactId>
+                <version>1.0</version>
             </dependency>
         </dependencies>
 
