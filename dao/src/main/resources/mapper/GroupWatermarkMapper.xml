@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.v2java.dao.mapper.GroupWatermarkMapper">
+    <update id="updateWatermark">
+        update group_watermark set max_watermark=#{newWartermark}
+        where group_id=#{groupId} and max_watermark=#{oldWatermark}
+    </update>
+
+    <select id="selectMaxWatermarkForUpdate" resultType="java.lang.Long">
+        select max_watermark from group_watermark for update
+        where group_id=#{groupId}
+    </select>
+
+
+</mapper>

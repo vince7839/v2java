@@ -1,10 +1,10 @@
-package com.v2java.fs;
+package com.v2java.fs.worker;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class FsRouterApplicationTests {
+class FsWorkerApplicationTests {
 
     @Test
     void contextLoads() {

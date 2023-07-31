@@ -1,4 +1,4 @@
-package com.v2java.fs;
+package com.v2java.fs.router;
 
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;

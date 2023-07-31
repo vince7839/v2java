@@ -1,4 +1,4 @@
-package com.v2java.fsworker;
+package com.v2java.fs.worker;
 
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;

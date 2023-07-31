@@ -1,4 +1,4 @@
-package com.v2java.fs;
+package com.v2java.fs.router;
 
 import lombok.Data;
 
@@ -16,5 +16,7 @@ public class WorkerHeartbeatDTO {
     private Long watermark;
 
     private String status;
+
+    private String host;
 
 }

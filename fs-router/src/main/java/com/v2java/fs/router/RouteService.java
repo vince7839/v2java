@@ -1,4 +1,4 @@
-package com.v2java.fs;
+package com.v2java.fs.router;
 
 import com.alibaba.fastjson.JSON;
 import com.auth0.jwt.JWT;

@@ -1,4 +1,4 @@
-package com.v2java.fsworker;
+package com.v2java.fs.worker;
 
 import com.v2java.dto.Response;
 import org.springframework.beans.factory.annotation.Autowired;
