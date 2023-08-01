@@ -3,15 +3,10 @@ package com.v2java.fs.router;
 import lombok.Data;
 
 @Data
-public class UploadAckMessage {
-
-    private String workerId;
-
-    private String group;
+public class FileAckExtra {
 
     private Long watermark;
 
     private String result;
-
 
 }

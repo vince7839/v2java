@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface WatermarkFileMapper {
 
     void insert(WatermarkFilePO po);
+
+    void updateFileStatus(String group,Long watermark,String status);
 }

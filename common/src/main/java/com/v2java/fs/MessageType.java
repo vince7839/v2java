@@ -9,7 +9,10 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum MessageType {
-    UPLOAD_ACK("001","接收完成"),
+    MASTER_FILE_ACK("WORKER_FILE_ACK","master文件接收反馈"),
+    //no need
+    SLAVE_FILE_ACK("101","slave文件接收反馈"),
+    ROUTER_NOTIFY_SYNC("ROUTER_NOTIFY_SYNC","router通知slave同步"),
     ;
     private String code;
     private String description;

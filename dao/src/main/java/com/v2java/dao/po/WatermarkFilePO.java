@@ -7,6 +7,14 @@ import lombok.Data;
  **/
 @Data
 public class WatermarkFilePO {
+
     private Long id;
 
+    private String groupId;
+
+    private Long watermark;
+
+    private String filename;
+
+    private String status;
 }
