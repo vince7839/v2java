@@ -13,6 +13,7 @@ public enum MessageType {
     //no need
     SLAVE_FILE_ACK("101","slave文件接收反馈"),
     ROUTER_NOTIFY_SYNC("ROUTER_NOTIFY_SYNC","router通知slave同步"),
+    WORKER_HEARTBEAT("WORKER_HEARTBEAT","worker心跳消息"),
     ;
     private String code;
     private String description;

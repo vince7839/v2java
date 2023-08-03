@@ -13,19 +13,18 @@ import java.util.Map;
 @Slf4j
 public class WorkerService {
 
-    Map<String,WorkerHeartbeatDTO> workerTable = new HashMap<>();
+    Map<String, WorkerMessage> heartbeatCache = new HashMap<>();
 
     Map<String,GroupState> groupTable = new HashMap<>();
 
-    public void update(WorkerHeartbeatDTO heartbeatDTO){
-        workerTable.put(heartbeatDTO.getWorkerId(),heartbeatDTO);
-
+    public void updateHeartbeat(WorkerMessage workerMessage){
+        heartbeatCache.put(workerMessage.getWorkerId(),workerMessage);
     }
 
     @Scheduled(fixedRate = 10*1000)
     public void refresh(){
-        workerTable.entrySet().forEach( entry -> {
-            WorkerHeartbeatDTO heartbeatDTO = entry.getValue();
+        heartbeatCache.entrySet().forEach( entry -> {
+            String host = entry.getValue().getHost();
             String groupId = entry.getValue().getWorkerId();
             GroupState groupState = groupTable.get(groupId);
             if (Objects.isNull(groupState)){
@@ -35,7 +34,7 @@ public class WorkerService {
 
             String workerId = entry.getKey();
             WorkerState workerState = groupState.getWorkerMap().get(workerId);
-            if (!workerState.getHost().equals(heartbeatDTO.getHost())){
+            if (!workerState.getHost().equals(host)){
                 //不同worker配置了相同workerId
                 log.warn("worker id conflict");
                 return;

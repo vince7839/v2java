@@ -8,11 +8,12 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "worker")
 @Data
 public class WorkerConfig {
+
     private String workerId;
 
     private String role;
 
-    private String group;
+    private String groupId;
 
     private String dataDir;
 }
