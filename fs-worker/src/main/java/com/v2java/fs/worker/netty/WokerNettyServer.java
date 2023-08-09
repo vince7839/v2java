@@ -1,4 +1,4 @@
-package com.v2java.fs.router.netty;
+package com.v2java.fs.worker.netty;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class RouterNettyServer {
+public class WokerNettyServer {
 
     EventLoopGroup bossGroup = new NioEventLoopGroup();
     EventLoopGroup workerGroup = new NioEventLoopGroup();
