@@ -8,6 +8,7 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.util.AttributeKey;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +33,8 @@ public class WorkerNettyClient {
                     protected void initChannel(SocketChannel ch) throws Exception {
                         ChannelPipeline pipeline = ch.pipeline();
                         // 添加其他处理器
-                        pipeline.addLast();
+                        pipeline.addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE,0,Long.BYTES));
+                        pipeline.addLast(new DataDecoder());
                     }
                 });
 

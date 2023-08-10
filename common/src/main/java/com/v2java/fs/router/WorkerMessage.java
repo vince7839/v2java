@@ -18,5 +18,7 @@ public class WorkerMessage {
 
     private String role;
 
+    private String watermarkBitMap;
+
     private String extra;
 }
