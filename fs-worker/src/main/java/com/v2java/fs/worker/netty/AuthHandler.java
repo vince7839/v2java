@@ -23,4 +23,5 @@ public class AuthHandler extends SimpleChannelInboundHandler<String> {
             ctx.writeAndFlush("AUTH_REQUIRED");
         }
     }
+
 }

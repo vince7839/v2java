@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.v2java.NettyMsgType;
 import com.v2java.fs.MessageType;
 import com.v2java.fs.worker.netty.WorkerNettyClient;
+import java.io.File;
 import java.util.BitSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,13 +30,21 @@ public class FileSychronizer {
                 syncFromMaster(i);
             }else{
                 //master不存在，本地存在
+                deleteByWatermark(i);
             }
+        }
+    }
+
+    private void deleteByWatermark(int i) {
+        File file = new File(String.valueOf(i));
+        if (file.exists()){
+            file.delete();
         }
     }
 
     public void syncFromMaster(int watermark){
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("watermark",watermark);
-        workerNettyClient.send(NettyMsgType.STRING);
+        workerNettyClient.send(jsonObject.toJSONString());
     }
 }
