@@ -33,14 +33,12 @@ public class WorkerNettyClient {
                     protected void initChannel(SocketChannel ch) throws Exception {
                         ChannelPipeline pipeline = ch.pipeline();
                         // 添加其他处理器
-                        pipeline.addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE,0,Long.BYTES));
+                        pipeline.addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE,0,Integer.BYTES));
                         pipeline.addLast(new DataDecoder());
+                        pipeline.addLast(new FileRecvHandler());
+                        pipeline.addLast(new JsonPacketHandler());
                     }
                 });
-
-        // 设置连接属性
-        AttributeKey<String> attrKey = AttributeKey.valueOf("authToken");
-        bootstrap.attr(attrKey, authToken());
 
         // 发起连接
         ChannelFuture channelFuture = bootstrap.connect(host, port).sync();

@@ -13,7 +13,7 @@ import org.springframework.util.StringUtils;
 
 @Component
 @Slf4j
-public class FileBitmapManager {
+public class FileManager {
 
     @Autowired
     WorkerConfig workerConfig;
@@ -68,5 +68,10 @@ public class FileBitmapManager {
     public String toBase64(){
         byte[] bytes = Base64.getEncoder().encode(bitSet.toByteArray());
         return new String(bytes);
+    }
+
+    public File getFileByWatermark(Long watermark){
+        String path = dataDir.getAbsolutePath()+"/"+watermark;
+        return new File(path);
     }
 }

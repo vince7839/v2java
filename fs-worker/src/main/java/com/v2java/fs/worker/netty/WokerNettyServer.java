@@ -10,6 +10,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import java.net.InetSocketAddress;
@@ -45,7 +46,9 @@ public class WokerNettyServer {
                     @Override
                     public void initChannel(SocketChannel ch) {
                         ChannelPipeline p = ch.pipeline();
+                        p.addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE,0,Integer.BYTES));
                         p.addLast(new AuthHandler());
+                        p.addLast(new JsonPacketHandler());
                     }
                 });
 

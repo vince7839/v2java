@@ -22,7 +22,7 @@ public class HeartbeatSender {
     WorkerConfig workerConfig;
 
     @Autowired
-    FileBitmapManager bitmapManager;
+    FileManager bitmapManager;
 
     @Scheduled(fixedRate = 10 * 1000)
     public void heartbeat() {
