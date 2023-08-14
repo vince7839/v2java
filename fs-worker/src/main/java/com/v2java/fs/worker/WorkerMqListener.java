@@ -12,6 +12,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 /**
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Component;
  **/
 @RocketMQMessageListener(consumerGroup = "GroupWorker",topic = "TopicWorker")
 @Component
+@ConditionalOnProperty(value = "worker.role",havingValue = "slave")
 @Slf4j
 public class WorkerMqListener implements RocketMQListener<WorkerMessage> {
 
@@ -37,6 +39,7 @@ public class WorkerMqListener implements RocketMQListener<WorkerMessage> {
     @Override
     public void onMessage(WorkerMessage workerMessage) {
         MessageProcessor<WorkerMessage> processor = processorMap.get(workerMessage.getType());
+        log.info("recv mq:{}",workerMessage);
         if (Objects.isNull(processor)){
             log.warn("unknown message:{}",workerMessage);
             return;

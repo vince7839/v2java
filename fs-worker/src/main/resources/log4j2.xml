@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="OFF">
+    <properties>
+        <!--定义变量,亦可以调用系统变量,比如${env:TESTLOG}/test/logs,其中TESTLOG是自己添加的系统环境变量  -->
+        <property name="LOG_HOME">/srv/www/logs/declare</property>
+        <property name="LOG_PATTERN">%d{yyyy.MM.dd 'at' HH:mm:ss z} %X{ip} [%thread] %-5level %class{36} %M() @%L [%X{flowNum}] [%X{userId}] - %msg%n</property>
+    </properties>
+
+
+    <Appenders>
+
+        <!-- 配置重写日志 -->
+<!--        <Rewrite name="rewrite">-->
+<!--            <DesensitivePolicy/>-->
+<!--            <AppenderRef ref="ErrorFile"/>-->
+<!--            <AppenderRef ref="RollingFile"/>-->
+<!--        </Rewrite>-->
+
+        <Console name="SYSOUT" target="SYSTEM_OUT">
+            <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+            <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+        </Console>
+
+
+        <!-- File 也通过ThresholdFilter的方式输出到日志，当然了append="false" 会在服务每次启动的时候清空日志(覆盖)  -->
+        <RollingFile name="ErrorFile" fileName="${LOG_HOME}/error.log" filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}/WebError-%d{yyyy-MM-dd-HH}-%i.log.gz">
+            <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <SizeBasedTriggeringPolicy size="5MB"/>
+            <!-- 最多备份30天以内的日志，此处为策略限制，Delete中可以按自己需要用正则表达式编写 -->
+            <DefaultRolloverStrategy>
+                <Delete basePath="${LOG_HOME}" maxDepth="1">
+                    <IfFileName glob="webError-*.log.gz"/>
+                    <IfLastModified age="30d"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+
+        <!--这个会打印出所有的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档-->
+        <RollingFile name="RollingFile" fileName="${LOG_HOME}/info.log" append="true"
+                filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}/WebInfo-%d{yyyy-MM-dd-HH}-%i.log.gz">
+            <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <SizeBasedTriggeringPolicy size="10MB"/>
+
+            <!-- 最多备份30天以内的日志，此处为策略限制，Delete中可以按自己需要用正则表达式编写 -->
+            <DefaultRolloverStrategy max="10">
+                <Delete basePath="${LOG_HOME}" maxDepth="1">
+                    <IfFileName glob="webInfo-*.log.gz"/>
+                    <IfLastModified age="15d"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+
+    </Appenders>
+
+    <Loggers>
+
+        <!--</logger>-->
+        <Root level="INFO">
+            <AppenderRef ref="SYSOUT"/>
+        </Root>
+
+        <!-- DAO层日志，ERROR日志级别，打印报错SQL语句 -->
+        <logger name="com.nuonuo.tax.enterprise.dao.mapper" level="ERROR" additivity="false">
+            <AppenderRef ref="ErrorFile"/>
+            <AppenderRef ref="RollingFile"/>
+        </logger>
+    </Loggers>
+</Configuration>

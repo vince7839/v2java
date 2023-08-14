@@ -9,8 +9,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum NettyMsgType {
-    STRING(0),
-    FILE(1),
+    STRING((byte)0),
+    FILE((byte)1),
     ;
-    private int code;
+    private byte code;
 }

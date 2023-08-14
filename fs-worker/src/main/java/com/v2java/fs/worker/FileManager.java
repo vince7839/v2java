@@ -51,6 +51,7 @@ public class FileManager {
     }
 
     public void scanFile(){
+        log.info("data dir:{},files:{}",dataDir.getAbsolutePath(),dataDir.listFiles());
         for(File file:dataDir.listFiles()){
             update(file.getName(),true);
         }

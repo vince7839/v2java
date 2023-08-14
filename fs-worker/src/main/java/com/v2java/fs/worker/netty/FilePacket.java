@@ -7,9 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class FilePacket {
 
-    //private Long watermark;
+    private Long watermark;
 
     private byte[] bytes;
-
-
 }

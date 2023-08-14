@@ -9,7 +9,6 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
-import io.netty.util.AttributeKey;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -34,7 +33,7 @@ public class WorkerNettyClient {
                         ChannelPipeline pipeline = ch.pipeline();
                         // 添加其他处理器
                         pipeline.addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE,0,Integer.BYTES));
-                        pipeline.addLast(new DataDecoder());
+                        pipeline.addLast(new StringDecoder());
                         pipeline.addLast(new FileRecvHandler());
                         pipeline.addLast(new JsonPacketHandler());
                     }
