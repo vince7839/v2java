@@ -27,16 +27,14 @@ public class MasterBroadcastSender {
     WorkerConfig workerConfig;
 
     @Autowired
-    FileManager bitmapManager;
+    FileManager fileManager;
 
     @Scheduled(fixedRate = 10 * 1000)
     public void heartbeat() {
         WorkerMessage workerMessage = new WorkerMessage();
         workerMessage.setType(MessageType.MASTER_BROADCAST.getCode());
+        workerMessage.setWatermarkBitMap(fileManager.toBase64());
         BeanUtils.copyProperties(workerConfig, workerMessage);
-        WorkerHeartbeatExtra extra = new WorkerHeartbeatExtra();
-        extra.setWatermarkBitMap(bitmapManager.toBase64());
-        workerMessage.setExtra(JSON.toJSONString(extra));
         mqTemplate.syncSend("TopicWorker", workerMessage);
         log.info("master send broadcast:{}",workerMessage);
     }

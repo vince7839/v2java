@@ -15,6 +15,8 @@ import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import java.net.InetSocketAddress;
 import javax.annotation.PostConstruct;
+
+import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -28,9 +30,13 @@ public class WokerNettyServer {
 
     Channel channel;
 
+    @Getter
+    int syncPort;
+
     @PostConstruct
     public void init(){
-        start(0);
+        syncPort = start(0);
+        log.info("master sync listen on port:{}",syncPort);
     }
 
     @SneakyThrows

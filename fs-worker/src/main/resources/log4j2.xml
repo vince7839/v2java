@@ -2,7 +2,7 @@
 <Configuration status="OFF">
     <properties>
         <!--定义变量,亦可以调用系统变量,比如${env:TESTLOG}/test/logs,其中TESTLOG是自己添加的系统环境变量  -->
-        <property name="LOG_HOME">/srv/www/logs/declare</property>
+        <property name="LOG_HOME">/var/log/worker</property>
         <property name="LOG_PATTERN">%d{yyyy.MM.dd 'at' HH:mm:ss z} %X{ip} [%thread] %-5level %class{36} %M() @%L [%X{flowNum}] [%X{userId}] - %msg%n</property>
     </properties>
 
@@ -62,10 +62,5 @@
             <AppenderRef ref="SYSOUT"/>
         </Root>
 
-        <!-- DAO层日志，ERROR日志级别，打印报错SQL语句 -->
-        <logger name="com.nuonuo.tax.enterprise.dao.mapper" level="ERROR" additivity="false">
-            <AppenderRef ref="ErrorFile"/>
-            <AppenderRef ref="RollingFile"/>
-        </logger>
     </Loggers>
 </Configuration>

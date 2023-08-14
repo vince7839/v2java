@@ -6,6 +6,8 @@ import com.v2java.fs.MessageType;
 import com.v2java.fs.worker.netty.WorkerNettyClient;
 import java.io.File;
 import java.util.BitSet;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,12 +15,16 @@ import org.springframework.stereotype.Component;
  * @author liaowenxing 2023/8/10
  **/
 @Component
-public class FileSychronizer {
+@Slf4j
+public class FileSynchronizer {
 
     @Autowired
     WorkerNettyClient workerNettyClient;
+    @Autowired
+    FileManager fileManager;
 
-    public void sync(BitSet masterBit,BitSet localBit){
+    public void syncIfNeed(BitSet masterBit){
+        BitSet localBit = fileManager.getBitSet();
         for (int i=0;i<masterBit.length();i++){
             boolean masterExist = masterBit.get(i);
             boolean localExist = localBit.get(i);
@@ -27,7 +33,7 @@ public class FileSychronizer {
             }
             if (masterExist){
                 //master存在，本地不存在
-                syncFromMaster(i);
+                syncFromMaster((long)i);
             }else{
                 //master不存在，本地存在
                 deleteByWatermark(i);
@@ -42,7 +48,8 @@ public class FileSychronizer {
         }
     }
 
-    public void syncFromMaster(int watermark){
+    public void syncFromMaster(Long watermark){
+        log.info("start sync:{}",watermark);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("watermark",watermark);
         workerNettyClient.send(jsonObject.toJSONString());

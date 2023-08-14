@@ -1,0 +1,15 @@
+
+rocketmq:
+    name-server: 127.0.0.1:9876
+    producer:
+        group: producer-worker
+#logging:
+#    config: classpath:log4j2.xml
+
+worker:
+    role: slave
+    dataDir: /Users/liaowenxing/slave
+    groupId: wg-1
+    workerId: wk-master
+server:
+    port: 8686

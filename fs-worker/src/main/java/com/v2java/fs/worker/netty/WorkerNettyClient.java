@@ -11,6 +11,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotNull;
@@ -21,6 +22,8 @@ import java.util.Objects;
 public class WorkerNettyClient {
 
     private Channel channel;
+
+    private String currentMaster;
 
     @SneakyThrows
     public void connect(String host,int port){
@@ -56,5 +59,15 @@ public class WorkerNettyClient {
             return;
         }
         channel.writeAndFlush(msg);
+    }
+
+    public void checkConnect(String ip,int port){
+        String key = ip+":"+port;
+        log.info("current master:{},check master:{}",currentMaster,key);
+        if (StringUtils.isNotEmpty(currentMaster) && currentMaster.equals(key)){
+            return;
+        }
+        connect(ip,port);
+        currentMaster = key;
     }
 }

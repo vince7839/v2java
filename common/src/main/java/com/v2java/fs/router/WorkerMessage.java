@@ -21,4 +21,8 @@ public class WorkerMessage {
     private String watermarkBitMap;
 
     private String extra;
+
+    private String syncIp;
+
+    private Integer syncPort;
 }
