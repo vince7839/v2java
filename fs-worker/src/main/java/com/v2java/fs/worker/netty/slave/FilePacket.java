@@ -1,4 +1,4 @@
-package com.v2java.fs.worker.netty;
+package com.v2java.fs.worker.netty.slave;
 
 import java.io.File;
 import lombok.AllArgsConstructor;
@@ -10,5 +10,5 @@ public class FilePacket {
 
     private Long watermark;
 
-    private File file;
+    private byte[] bytes;
 }

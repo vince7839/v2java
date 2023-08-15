@@ -1,7 +1,7 @@
 package com.v2java.fs.worker;
 
 import com.v2java.fs.worker.netty.slave.SyncPacket;
-import com.v2java.fs.worker.netty.WorkerNettyClient;
+import com.v2java.fs.worker.netty.slave.WorkerNettyClient;
 import java.io.File;
 import java.util.BitSet;
 

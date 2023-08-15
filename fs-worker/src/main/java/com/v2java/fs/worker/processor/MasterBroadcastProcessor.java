@@ -4,7 +4,7 @@ import com.v2java.fs.MessageProcessor;
 import com.v2java.fs.MessageType;
 import com.v2java.fs.router.WorkerMessage;
 import com.v2java.fs.worker.FileSynchronizer;
-import com.v2java.fs.worker.netty.WorkerNettyClient;
+import com.v2java.fs.worker.netty.slave.WorkerNettyClient;
 import java.util.Base64;
 import java.util.BitSet;
 import lombok.extern.slf4j.Slf4j;

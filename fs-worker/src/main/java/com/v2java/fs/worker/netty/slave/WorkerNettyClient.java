@@ -1,5 +1,9 @@
-package com.v2java.fs.worker.netty;
+package com.v2java.fs.worker.netty.slave;
 
+import com.v2java.fs.worker.FileManager;
+import com.v2java.fs.worker.netty.ChannelExceptionHandler;
+import com.v2java.fs.worker.netty.PacketDecoder;
+import com.v2java.fs.worker.netty.StringEncoder;
 import com.v2java.fs.worker.netty.slave.SyncPacketEncoder;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -11,9 +15,12 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
+import io.netty.handler.logging.LogLevel;
+import io.netty.handler.logging.LoggingHandler;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotNull;
@@ -27,6 +34,9 @@ public class WorkerNettyClient {
 
     private String currentMaster;
 
+    @Autowired
+    FileManager fileManager;
+
     @SneakyThrows
     public void connect(String host, int port) {
         Bootstrap bootstrap = new Bootstrap();
@@ -37,14 +47,15 @@ public class WorkerNettyClient {
                     protected void initChannel(SocketChannel ch) throws Exception {
                         ChannelPipeline pipeline = ch.pipeline();
                         // 添加其他处理器
-//                        pipeline.addLast(new LoggingHandler(LogLevel.INFO));
-//                        pipeline.addLast(new ChannelExceptionHandler());
+                        pipeline.addLast(new LoggingHandler(LogLevel.INFO));
+                        pipeline.addLast(new ChannelExceptionHandler());
                         pipeline.addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0,
-                                Long.BYTES));
+                                Long.BYTES,0,Long.BYTES));
                         pipeline.addLast(new LengthFieldPrepender(Long.BYTES));
+                        pipeline.addLast(new PacketDecoder());
                         pipeline.addLast(new StringEncoder());
                         pipeline.addLast(new SyncPacketEncoder());
-                        pipeline.addLast(new PacketDecoder());
+                        pipeline.addLast(new FileRecvHandler(fileManager));
                         //pipeline.addLast(new StringDecoder());
 //                        pipeline.addLast(new FileRecvHandler());
 //                        pipeline.addLast(new JsonPacketHandler());

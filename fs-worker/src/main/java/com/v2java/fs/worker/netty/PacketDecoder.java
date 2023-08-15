@@ -1,6 +1,8 @@
 package com.v2java.fs.worker.netty;
 
 import com.v2java.NettyMsgType;
+import com.v2java.fs.worker.netty.slave.FilePacket;
+import com.v2java.fs.worker.netty.slave.SyncPacket;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
@@ -30,6 +32,9 @@ public class PacketDecoder extends ByteToMessageDecoder {
             byte[] bytes = new byte[byteBuf.readableBytes()];
             byteBuf.readBytes(bytes);
             msg = new FilePacket(watermark,bytes);
+        }else if (NettyMsgType.SYNC.getCode() == type){
+            Long watermark = byteBuf.readLong();
+            msg = new SyncPacket(watermark,0L);
         }
         if (Objects.nonNull(msg)) {
             out.add(msg);
