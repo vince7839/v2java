@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
+@Deprecated
 public class FileDecoder extends ByteToMessageCodec<FilePacket> {
 
     @Autowired
@@ -42,11 +43,6 @@ public class FileDecoder extends ByteToMessageCodec<FilePacket> {
      */
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf byteBuf, List list) {
-        long length = byteBuf.readLong();
-        byte type = byteBuf.readByte();
-        long watermark = byteBuf.readLong();
-        byte[] bytes = new byte[byteBuf.readableBytes()];
-        byteBuf.readBytes(bytes);
-        list.add(new FilePacket(watermark,bytes));
+
     }
 }

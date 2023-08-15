@@ -8,8 +8,8 @@ rocketmq:
 
 worker:
     role: slave
-    dataDir: C:\Users\Administrator\master
+    dataDir: C:\Users\Administrator\slave
     groupId: wg-1
-    workerId: wk-master
+    workerId: wk-slave
 server:
     port: 8081

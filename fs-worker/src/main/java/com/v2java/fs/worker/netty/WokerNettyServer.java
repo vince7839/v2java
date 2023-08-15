@@ -52,9 +52,12 @@ public class WokerNettyServer {
                     @Override
                     public void initChannel(SocketChannel ch) {
                         ChannelPipeline p = ch.pipeline();
-                        p.addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE,0,Integer.BYTES));
-                        p.addLast(new AuthHandler());
-                        p.addLast(new JsonPacketHandler());
+//                        p.addLast(new LoggingHandler(LogLevel.INFO));
+//                        p.addLast(new ChannelExceptionHandler());
+                        p.addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE,0,Long.BYTES,0,Long.BYTES));
+                          p.addLast(new PacketDecoder());
+//                        p.addLast(new AuthHandler());
+                          p.addLast(new JsonPacketHandler());
                     }
                 });
 

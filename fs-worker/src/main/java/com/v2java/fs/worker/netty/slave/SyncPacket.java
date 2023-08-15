@@ -1,14 +1,18 @@
-package com.v2java.fs.worker.netty;
+package com.v2java.fs.worker.netty.slave;
 
 import java.io.File;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+/**
+ * @author liaowenxing 2023/8/15
+ **/
 @Data
 @AllArgsConstructor
-public class FilePacket {
+public class SyncPacket {
 
     private Long watermark;
 
-    private File file;
+    private Long start;
+
 }

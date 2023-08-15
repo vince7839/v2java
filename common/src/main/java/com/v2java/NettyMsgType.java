@@ -11,6 +11,7 @@ import lombok.Getter;
 public enum NettyMsgType {
     STRING((byte)0),
     FILE((byte)1),
+    SYNC((byte)2),
     ;
     private byte code;
 }

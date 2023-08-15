@@ -33,6 +33,7 @@ public class MasterBroadcastProcessor implements MessageProcessor<WorkerMessage>
 
     @Override
     public void process(WorkerMessage workerMessage) {
+
         workerNettyClient.checkConnect(workerMessage.getSyncIp(),workerMessage.getSyncPort());
         String bitMapStr = workerMessage.getWatermarkBitMap();
         if (StringUtils.isEmpty(bitMapStr)){

@@ -1,8 +1,6 @@
 package com.v2java.fs.worker;
 
-import com.alibaba.fastjson.JSONObject;
-import com.v2java.NettyMsgType;
-import com.v2java.fs.MessageType;
+import com.v2java.fs.worker.netty.slave.SyncPacket;
 import com.v2java.fs.worker.netty.WorkerNettyClient;
 import java.io.File;
 import java.util.BitSet;
@@ -23,18 +21,18 @@ public class FileSynchronizer {
     @Autowired
     FileManager fileManager;
 
-    public void syncIfNeed(BitSet masterBit){
+    public void syncIfNeed(BitSet masterBit) {
         BitSet localBit = fileManager.getBitSet();
-        for (int i=0;i<masterBit.length();i++){
+        for (int i = 0; i < masterBit.length(); i++) {
             boolean masterExist = masterBit.get(i);
             boolean localExist = localBit.get(i);
-            if (masterExist == localExist){
+            if (masterExist == localExist) {
                 continue;
             }
-            if (masterExist){
+            if (masterExist) {
                 //master存在，本地不存在
-                syncFromMaster((long)i);
-            }else{
+                syncFromMaster((long) i);
+            } else {
                 //master不存在，本地存在
                 deleteByWatermark(i);
             }
@@ -43,15 +41,12 @@ public class FileSynchronizer {
 
     private void deleteByWatermark(int i) {
         File file = new File(String.valueOf(i));
-        if (file.exists()){
+        if (file.exists()) {
             file.delete();
         }
     }
 
-    public void syncFromMaster(Long watermark){
-        log.info("start sync:{}",watermark);
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("watermark",watermark);
-        workerNettyClient.send(jsonObject.toJSONString());
+    public void syncFromMaster(Long watermark) {
+        workerNettyClient.send(new SyncPacket(watermark, 0L));
     }
 }

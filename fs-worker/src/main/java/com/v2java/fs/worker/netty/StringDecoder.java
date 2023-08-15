@@ -10,6 +10,7 @@ import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Deprecated
 public class StringDecoder extends ByteToMessageCodec<String> {
 
     @Override
@@ -17,10 +18,10 @@ public class StringDecoder extends ByteToMessageCodec<String> {
         //  log.info("发出消息：{}",msg.toString());
         byte[] bytes = msg.getBytes();
         //8字节消息长度 + 1字节消息类型 + 8字节watermark
-        byteBuf.writeLong(Long.BYTES + Byte.BYTES + bytes.length);
+       // byteBuf.writeLong(Long.BYTES + Byte.BYTES + bytes.length);
         byteBuf.writeByte(NettyMsgType.STRING.getCode());
         byteBuf.writeBytes(bytes);
-        ctx.writeAndFlush(byteBuf);
+       // ctx.writeAndFlush(byteBuf);
     }
 
     /**
@@ -32,7 +33,7 @@ public class StringDecoder extends ByteToMessageCodec<String> {
      */
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf byteBuf, List list) {
-        long length = byteBuf.readLong();
+        //long length = byteBuf.readLong();
         int type = byteBuf.readByte();
         byte[] bytes = new byte[byteBuf.readableBytes()];
         byteBuf.readBytes(bytes);

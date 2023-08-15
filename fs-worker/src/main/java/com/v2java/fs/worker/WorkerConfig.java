@@ -16,4 +16,6 @@ public class WorkerConfig {
     private String groupId;
 
     private String dataDir;
+
+    private String ip;
 }
