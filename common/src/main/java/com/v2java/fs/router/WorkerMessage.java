@@ -26,5 +26,6 @@ public class WorkerMessage {
 
     private Integer syncPort;
 
-    private String timestamp;
+    private Long timestamp;
+
 }

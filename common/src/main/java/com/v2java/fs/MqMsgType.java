@@ -8,7 +8,7 @@ import lombok.Getter;
  **/
 @Getter
 @AllArgsConstructor
-public enum MessageType {
+public enum MqMsgType {
     MASTER_FILE_ACK("WORKER_FILE_ACK","master文件接收反馈"),
     //no need
     SLAVE_FILE_ACK("101","slave文件接收反馈"),

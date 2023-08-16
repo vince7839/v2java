@@ -1,7 +1,7 @@
 package com.v2java.fs.worker.processor;
 
 import com.v2java.fs.MessageProcessor;
-import com.v2java.fs.MessageType;
+import com.v2java.fs.MqMsgType;
 import com.v2java.fs.router.WorkerMessage;
 import com.v2java.fs.worker.FileSynchronizer;
 import com.v2java.fs.worker.netty.slave.WorkerNettyClient;
@@ -28,7 +28,7 @@ public class MasterBroadcastProcessor implements MessageProcessor<WorkerMessage>
 
     @Override
     public String getType() {
-        return MessageType.MASTER_BROADCAST.getCode();
+        return MqMsgType.MASTER_BROADCAST.getCode();
     }
 
     @Override

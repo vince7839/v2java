@@ -1,7 +1,6 @@
 package com.v2java.fs.worker;
 
-import com.alibaba.fastjson.JSON;
-import com.v2java.fs.router.WorkerHeartbeatExtra;
+import com.v2java.fs.MqMsgType;
 import com.v2java.fs.router.WorkerMessage;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.BeanUtils;
@@ -27,10 +26,10 @@ public class HeartbeatSender {
     @Scheduled(fixedRate = 10 * 1000)
     public void heartbeat() {
         WorkerMessage workerMessage = new WorkerMessage();
+        workerMessage.setType(MqMsgType.WORKER_HEARTBEAT.getCode());
         BeanUtils.copyProperties(workerConfig, workerMessage);
-        WorkerHeartbeatExtra extra = new WorkerHeartbeatExtra();
-        extra.setWatermarkBitMap(bitmapManager.toBase64());
-        workerMessage.setExtra(JSON.toJSONString(extra));
+        workerMessage.setWatermarkBitMap(bitmapManager.toBase64());
+        workerMessage.setTimestamp(System.currentTimeMillis());
         mqTemplate.syncSend("TopicRouter", workerMessage);
     }
 }

@@ -35,11 +35,11 @@ public class StorageService {
                             .build()
                             .verify(request.getToken());
         Date expiresAt = jwt.getExpiresAt();
-        if (Objects.isNull(expiresAt)||expiresAt.after(new Date())){
+        if (Objects.isNull(expiresAt)||expiresAt.before(new Date())){
             send();
             throw new RuntimeException("jwt过期");
         }
-        String json = jwt.getPayload();
+        String json = jwt.getClaim("cert").asString();
         StorageTarget storageTarget = JSON.parseObject(json, StorageTarget.class);
         if (!workerConfig.getWorkerId().equals(storageTarget.getWorkerId())){
             send();

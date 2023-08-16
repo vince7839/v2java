@@ -1,6 +1,6 @@
 package com.v2java.fs.worker;
 
-import com.v2java.fs.MessageType;
+import com.v2java.fs.MqMsgType;
 import com.v2java.fs.router.WorkerMessage;
 import com.v2java.fs.worker.netty.master.WokerNettyServer;
 import java.text.SimpleDateFormat;
@@ -38,11 +38,11 @@ public class MasterBroadcastSender {
     @Scheduled(fixedRate = 10 * 1000)
     public void heartbeat() {
         WorkerMessage workerMessage = new WorkerMessage();
-        workerMessage.setType(MessageType.MASTER_BROADCAST.getCode());
+        workerMessage.setType(MqMsgType.MASTER_BROADCAST.getCode());
         workerMessage.setWatermarkBitMap(fileManager.toBase64());
         workerMessage.setSyncIp(workerConfig.getIp());
         workerMessage.setSyncPort(nettyServer.getSyncPort());
-        workerMessage.setTimestamp(format.format(new Date()));
+        workerMessage.setTimestamp(System.currentTimeMillis());
         BeanUtils.copyProperties(workerConfig, workerMessage);
         mqTemplate.syncSend("TopicWorker", workerMessage);
         log.info("master send broadcast:{}",workerMessage);

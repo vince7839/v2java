@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.rocketmq.spring.annotation.MessageModel;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,8 @@ import org.springframework.stereotype.Component;
 /**
  * @author liaowenxing 2023/8/1
  **/
-@RocketMQMessageListener(consumerGroup = "group-router",topic = "TopicRouter")
+@RocketMQMessageListener(consumerGroup = "group-router",topic = "TopicRouter"
+        ,messageModel = MessageModel.BROADCASTING)
 @Component
 @Slf4j
 public class MessageListener implements RocketMQListener<WorkerMessage> {

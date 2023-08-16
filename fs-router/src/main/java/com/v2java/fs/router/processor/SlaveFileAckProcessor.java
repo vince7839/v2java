@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.v2java.dao.mapper.WatermarkFileMapper;
 import com.v2java.fs.MessageEnum;
 import com.v2java.fs.MessageProcessor;
-import com.v2java.fs.MessageType;
+import com.v2java.fs.MqMsgType;
 import com.v2java.fs.router.FileAckExtra;
 import com.v2java.fs.router.FileStatusEnum;
 import com.v2java.fs.router.WorkerMessage;
@@ -20,7 +20,7 @@ public class SlaveFileAckProcessor implements MessageProcessor<WorkerMessage> {
 
     @Override
     public String getType() {
-        return MessageType.SLAVE_FILE_ACK.getCode();
+        return MqMsgType.SLAVE_FILE_ACK.getCode();
     }
 
     @Override

@@ -1,13 +1,13 @@
 package com.v2java.fs.router;
 
-import java.util.Objects;
-import java.util.Optional;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
-
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
@@ -15,58 +15,86 @@ public class WorkerService {
 
     Map<String, WorkerMessage> heartbeatCache = new HashMap<>();
 
-    Map<String,GroupState> groupTable = new HashMap<>();
+    Map<String, GroupState> groupTable = new HashMap<>();
 
-    public void updateHeartbeat(WorkerMessage workerMessage){
-        heartbeatCache.put(workerMessage.getWorkerId(),workerMessage);
+    public void updateHeartbeat(WorkerMessage workerMessage) {
+        heartbeatCache.put(workerMessage.getWorkerId(), workerMessage);
     }
 
-    @Scheduled(fixedRate = 10*1000)
-    public void refresh(){
-        heartbeatCache.entrySet().forEach( entry -> {
-            String host = entry.getValue().getHost();
-            String groupId = entry.getValue().getWorkerId();
-            GroupState groupState = groupTable.get(groupId);
-            if (Objects.isNull(groupState)){
-                groupState = new GroupState();
-                groupTable.put(groupId,groupState);
-            }
-
+    @Scheduled(fixedRate = 10 * 1000)
+    public void refresh() {
+        groupTable.clear();
+        long now = System.currentTimeMillis();
+        heartbeatCache.entrySet().forEach(entry -> {
             String workerId = entry.getKey();
-            WorkerState workerState = groupState.getWorkerMap().get(workerId);
-            if (!workerState.getHost().equals(host)){
-                //不同worker配置了相同workerId
-                log.warn("worker id conflict");
+            WorkerMessage msg = entry.getValue();
+            //10s之前的不处理
+            if (Objects.isNull(msg.getTimestamp())
+                    || now - msg.getTimestamp() > 10 * 1000) {
                 return;
             }
-            groupState.getWorkerMap().put(workerId,workerState);
+
+            GroupState groupState = getGroup(msg);
+            if (Objects.isNull(groupState)){
+                log.error("heartbeat no group info:{}",msg);
+                return;
+            }
+
+            WorkerState workerState = createWorkerState(msg);
+            if ("master".equals(workerState.getRole())) {
+                groupState.setMaster(workerState);
+            } else {
+                groupState.getSlaveList().add(workerState);
+            }
         });
     }
 
-    public StorageTarget requestStorage(StorageRequest storageRequest){
+    public WorkerState createWorkerState(WorkerMessage msg) {
+        WorkerState workerState = new WorkerState();
+        BeanUtils.copyProperties(msg, workerState);
+        return workerState;
+    }
+
+    public GroupState getGroup(WorkerMessage msg){
+        if (StringUtils.isEmpty(msg.getGroupId())){
+            log.error("wrong group id");
+            return null;
+        }
+        GroupState groupState = groupTable.get(msg.getGroupId());
+        if (Objects.isNull(groupState)) {
+            groupState = new GroupState();
+            groupState.setGroupId(msg.getGroupId());
+            groupTable.put(msg.getGroupId(), groupState);
+        }
+        return groupState;
+    }
+
+
+    public StorageTarget requestStorage(StorageRequest storageRequest) {
         //TODO 对group做负载均衡
         WorkerState workerState = loadBalance(groupTable);
-        if (Objects.isNull(workerState)){
+        if (Objects.isNull(workerState)) {
+            log.error("no master to upload");
             return null;
         }
         StorageTarget storageTarget = new StorageTarget();
-        storageTarget.setHost(workerState.getHost());
+        storageTarget.setUploadUrl(workerState.getUploadUrl());
         storageTarget.setWorkerId(workerState.getWorkerId());
+        storageTarget.setGroupId(workerState.getGroupId());
         //分配group内水位
 
         return storageTarget;
     }
 
-    public WorkerState loadBalance(Map<String,GroupState> groupMap){
-        Optional<GroupState> optional = groupMap.values().stream().findAny();
-        if (!optional.isPresent()){
-            return null;
+    public WorkerState loadBalance(Map<String, GroupState> groupMap) {
+        //负载均衡
+        for (GroupState groupState : groupMap.values()) {
+            if (Objects.isNull(groupState.getMaster())){
+                log.warn("group lose master:{}",groupState);
+                continue;
+            }
+            return groupState.getMaster();
         }
-        Optional<WorkerState> workerStateOptional = optional.get().getWorkerMap()
-                .values().stream().findAny();
-        if (!workerStateOptional.isPresent()){
-            return null;
-        }
-        return workerStateOptional.get();
+        return null;
     }
 }

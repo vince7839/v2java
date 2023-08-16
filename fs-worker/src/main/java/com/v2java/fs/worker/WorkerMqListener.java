@@ -9,6 +9,7 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.rocketmq.spring.annotation.MessageModel;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Component;
 /**
  * @author liaowenxing 2023/8/10
  **/
-@RocketMQMessageListener(consumerGroup = "GroupWorker",topic = "TopicWorker")
+@RocketMQMessageListener(consumerGroup = "GroupWorker",topic = "TopicWorker",messageModel = MessageModel.BROADCASTING)
 @Component
 @ConditionalOnProperty(value = "worker.role",havingValue = "slave")
 @Slf4j

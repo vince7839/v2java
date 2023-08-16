@@ -1,7 +1,7 @@
 package com.v2java.fs.router.processor;
 
 import com.v2java.fs.MessageProcessor;
-import com.v2java.fs.MessageType;
+import com.v2java.fs.MqMsgType;
 import com.v2java.fs.router.WorkerMessage;
 import com.v2java.fs.router.WorkerService;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ public class WorkerHeartbeatProcessor implements MessageProcessor<WorkerMessage>
 
     @Override
     public String getType() {
-        return MessageType.WORKER_HEARTBEAT.getCode();
+        return MqMsgType.WORKER_HEARTBEAT.getCode();
     }
 
     @Override

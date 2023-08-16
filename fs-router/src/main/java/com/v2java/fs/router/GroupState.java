@@ -1,8 +1,7 @@
 package com.v2java.fs.router;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import lombok.Data;
 
 /**
@@ -13,5 +12,7 @@ public class GroupState {
 
     private String groupId;
 
-    private Map<String,WorkerState> workerMap = new HashMap<>();
+    private WorkerState master;
+
+    private List<WorkerState> slaveList = new ArrayList<>();
 }

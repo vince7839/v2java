@@ -10,9 +10,11 @@ public class WorkerState {
 
     private String workerId;
 
-    private String group;
+    private String groupId;
 
-    private String host;
+    private String role;
+
+    private String uploadUrl;
 
     private Long totalSpaceMb;
 
