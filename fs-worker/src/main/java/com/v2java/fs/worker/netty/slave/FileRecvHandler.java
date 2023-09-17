@@ -21,14 +21,6 @@ public class FileRecvHandler extends SimpleChannelInboundHandler<FilePacket> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, FilePacket msg) throws Exception {
-        File file = fileManager.getFileByWatermark(msg.getWatermark());
-        try (
-                OutputStream out = new FileOutputStream(file)
-        ) {
-            out.write(msg.getBytes());
-            //TODO update bitSet
-        } catch (Exception e) {
-            log.error("write watermark file exception", e);
-        }
+        fileManager.saveWatermarkFile(msg);
     }
 }

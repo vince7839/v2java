@@ -1,10 +1,14 @@
 package com.v2java.fs.worker;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.Base64;
 import java.util.BitSet;
 import javax.annotation.PostConstruct;
 import javax.swing.filechooser.FileSystemView;
+
+import com.v2java.fs.worker.netty.slave.FilePacket;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,5 +78,18 @@ public class FileManager {
     public File getFileByWatermark(Long watermark){
         String path = dataDir.getAbsolutePath()+"/"+watermark;
         return new File(path);
+    }
+
+    public void saveWatermarkFile(FilePacket filePacket){
+        File file = getFileByWatermark(filePacket.getWatermark());
+        try (
+                OutputStream out = new FileOutputStream(file)
+        ) {
+            out.write(filePacket.getBytes());
+            bitSet.set(filePacket.getWatermark().intValue(),true);
+            //TODO tmp文件防止重复同步 增加队列有序同步 同步前检查文件是否存在或者正在同步
+        } catch (Exception e) {
+            log.error("write watermark file exception", e);
+        }
     }
 }
