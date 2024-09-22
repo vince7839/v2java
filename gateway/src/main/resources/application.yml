@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      routes:
+        # =====================================
+        # to run server
+        # $ wscat --listen 9000
+        # to run client
+        # $ wscat --connect ws://localhost:8080/echo
+        - id: route_hello
+          uri: lb://dubbo-consumer
+          order: 9000
+          predicates:
+            - Path=/v2java/hello
+        # =====================================
+        - id: route_bye
+          uri: lb://dubbo-consumer
+          order: 10000
+          predicates:
+            - Path=/v2java/bye
+    nacos:
+      server-addr: localhost:8848
+server:
+  port: 9090

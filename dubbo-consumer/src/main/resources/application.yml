@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: dubbo-consumer
+  cloud:
+    nacos:
+      server-addr: localhost:8848
+
+
+server:
+  port: 8082
+dubbo:
+  protocol:
+    port: -1
