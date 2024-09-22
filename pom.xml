@@ -8,9 +8,6 @@
         <module>task-dispatcher</module>
         <module>quickstart</module>
         <module>common</module>
-        <module>fs-router</module>
-        <module>fs-worker</module>
-        <module>dao</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

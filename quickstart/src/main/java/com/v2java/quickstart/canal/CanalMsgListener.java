@@ -3,6 +3,7 @@ package com.v2java.quickstart.canal;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 /**
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RocketMQMessageListener(topic = "TopicTest",consumerGroup = "group1")
 @Slf4j
+@ConditionalOnProperty("msg.queue")
 public class CanalMsgListener implements RocketMQListener<CanalMessage> {
 
 
