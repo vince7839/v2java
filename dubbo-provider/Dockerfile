@@ -1,4 +1,4 @@
-FROM java:8
+FROM openjdk:8-jdk-alpine
 
 ADD target/*.jar dubbo-provider.jar
 
