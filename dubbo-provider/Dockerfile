@@ -1,5 +1,5 @@
 #使用基础镜像maven:3.6.0-jdk-8-slim来构建一个Maven项目（AS build 给这个构建阶段命名为 build，在后面引用这个阶段的镜像时直接使用别名就可以）
-FROM maven:3.6.0-jdk-8-slim AS build
+FROM registry.cn-hangzhou.aliyuncs.com/maven:3.6.0-jdk-8-slim AS build
 
 #设置应用工作目录
 WORKDIR /code
