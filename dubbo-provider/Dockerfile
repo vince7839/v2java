@@ -1,5 +1,7 @@
 FROM openjdk:8-jdk-alpine
 
-COPY target/*.jar dubbo-provider.jar
+WORKDIR /srv
 
-ENTRYPOINT ["java","-jar","dubbo-provider.jar"]
+COPY target/*.jar /srv/dubbo-provider.jar
+
+ENTRYPOINT ["java","-jar","/srv/dubbo-provider.jar"]
