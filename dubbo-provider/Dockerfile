@@ -5,9 +5,9 @@ FROM registry.cn-hangzhou.aliyuncs.com/lwx_img_repo/maven:1.0 AS build
 WORKDIR /code
 
 #将当前目录（即 Dockerfile所在的目录）的所有文件和目录复制到容器内的/app目录中
-COPY ../* /code
+COPY ../* .
 #编译项目
-RUN mvn clean package -B -Dmaven.test.skip=true
+RUN mvn clean package -B /code/dubbo-provider/pom.xml -Dmaven.test.skip=true
 
 #运行时镜像
 FROM openjdk:8-jdk-alpine
