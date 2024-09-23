@@ -8,7 +8,7 @@
 
     <groupId>com.example</groupId>
     <artifactId>dependencies</artifactId>
-    <packaging>POM</packaging>
+    <packaging>pom</packaging>
 <!--    <version>${module.version}</version>-->
     <version>1.0</version>
 
