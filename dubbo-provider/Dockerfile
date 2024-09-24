@@ -5,7 +5,7 @@ FROM registry.cn-hangzhou.aliyuncs.com/lwx_img_repo/maven:1.0 AS build
 WORKDIR /code
 
 #将当前目录（即 Dockerfile所在的目录）的所有文件和目录复制到容器内的/app目录中
-COPY ../* .
+COPY ../ .
 
 RUN ls
 
