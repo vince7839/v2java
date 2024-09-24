@@ -7,6 +7,8 @@ WORKDIR /code
 #将当前目录（即 Dockerfile所在的目录）的所有文件和目录复制到容器内的/app目录中
 COPY ../ .
 
+RUN pwd
+
 RUN ls
 
 #编译项目
