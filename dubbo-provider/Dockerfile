@@ -7,7 +7,7 @@ WORKDIR /code
 #将当前目录（即 Dockerfile所在的目录）的所有文件和目录复制到容器内的/app目录中
 COPY ../* .
 #编译项目
-RUN mvn clean install -B /code/dubbo-provider/pom.xml -Dmaven.test.skip=true
+RUN mvn clean install -B /code/pom.xml -Dmaven.test.skip=true
 
 #运行时镜像
 FROM openjdk:8-jdk-alpine
