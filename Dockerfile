@@ -12,7 +12,7 @@ RUN pwd
 RUN ls
 
 #编译项目
-RUN mvn clean install -B -Dmaven.test.skip=true
+RUN mvn clean package -B -Dmaven.test.skip=true
 
 #运行时镜像
 FROM openjdk:8-jdk-alpine
@@ -21,7 +21,7 @@ FROM openjdk:8-jdk-alpine
 WORKDIR /app
 
 # 将构建产物拷贝到运行时的工作目录中（从之前命名为 build 的构建阶段中复制构建产物到当前阶段的当前目录下）
-COPY --from=build dubbo-provider/target/*.jar ./dubbo-provider.jar
+COPY --from=build ./dubbo-provider/target/*.jar ./dubbo-provider.jar
 
 # 服务暴露的端口
 EXPOSE 20880
