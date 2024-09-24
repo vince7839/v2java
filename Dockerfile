@@ -14,6 +14,8 @@ RUN ls
 #编译项目
 RUN mvn clean package -B -Dmaven.test.skip=true
 
+RUN ls ./dubbo-provider
+
 #运行时镜像
 FROM openjdk:8-jdk-alpine
 
