@@ -11,4 +11,4 @@ COPY ./dubbo-provider/target/*.jar ./dubbo-provider.jar
 EXPOSE 20880
 
 # 启动命令
-ENTRYPOINT ["java","-jar","/app/dubbo-provider.jar"]
+ENTRYPOINT ["java","-jar","/app/dubbo-provider.jar","--spring.profiles.active=prod"]

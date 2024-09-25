@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: dubbo-provider
+  cloud:
+    nacos:
+      server-addr: mse-0b4b8640-nacos-ans.mse.aliyuncs.com
+
+dubbo:
+  scan:
+    base-packages: com.example.dubboprovider
+  protocol:
+    port: 20880
