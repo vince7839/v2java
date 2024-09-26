@@ -4,8 +4,6 @@ spring:
   cloud:
     nacos:
       server-addr: mse-0b4b8640-nacos-ans.mse.aliyuncs.com
-  config:
-    import: nacos:dubbo-consumer-prod.properties?group=DEFAULT_GROUP&refreshEnabled=true
 
 server:
   port: 8082
