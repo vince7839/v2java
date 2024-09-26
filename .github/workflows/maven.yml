@@ -29,6 +29,9 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn -B clean package -Dmaven.test.skip=true
+      
+    - name: show commit sha
+      run: echo commit_id=>${{ github.sha }}
 
     - name: Build and push Docker images
       run: |
