@@ -38,3 +38,7 @@ jobs:
         docker build . --file ./dubbo-provider/Dockerfile --tag registry.cn-hangzhou.aliyuncs.com/lwx_img_repo/dubbo-provider:1.0
         # 推送镜像到镜像仓库
         docker push registry.cn-hangzhou.aliyuncs.com/lwx_img_repo/dubbo-provider:1.0
+        # 使用Dockerfile构建镜像
+        docker build . --file ./dubbo-consumer/Dockerfile --tag registry.cn-hangzhou.aliyuncs.com/lwx_img_repo/dubbo-consumer:1.0
+        # 推送镜像到镜像仓库
+        docker push registry.cn-hangzhou.aliyuncs.com/lwx_img_repo/dubbo-consumer:1.0
