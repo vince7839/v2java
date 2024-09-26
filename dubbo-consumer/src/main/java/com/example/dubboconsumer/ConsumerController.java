@@ -1,5 +1,6 @@
 package com.example.dubboconsumer;
 
+import com.alibaba.cloud.nacos.NacosConfigProperties;
 import com.v2java.dto.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,8 @@ public class ConsumerController {
     @Value("${v2java.config:defaultV2java}")
     private String config;
 
-    private String id = "vgjgjgjgj";
+    @Autowired
+    private NacosConfigProperties properties;
 
     @GetMapping("/v2java/hello")
     public Response hello(String name){
@@ -37,6 +39,7 @@ public class ConsumerController {
     @GetMapping("/v2java/config")
     public Response config(){
         log.info("config");
+        log.info("nacos config:"+properties.toString());
         return Response.success(config);
     }
 
