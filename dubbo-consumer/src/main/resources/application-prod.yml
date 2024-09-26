@@ -1,12 +1,7 @@
 spring:
-  application:
-    name: dubbo-consumer
   cloud:
     nacos:
       server-addr: mse-0b4b8640-nacos-ans.mse.aliyuncs.com
 
 server:
   port: 8082
-dubbo:
-  protocol:
-    port: -1
