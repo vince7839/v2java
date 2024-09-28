@@ -1,9 +1,10 @@
 spring:
   cloud:
     nacos:
-      server-addr: mse-0b4b8640-nacos-ans.mse.aliyuncs.com:8848
+      #server-addr: mse-0b4b8640-nacos-ans.mse.aliyuncs.com:8848
       config:
         file-extension: properties
+      server-addr: mse-896ea3f0-p.nacos-ans.mse.aliyuncs.com:8848
 
   profiles:
     active: prod
