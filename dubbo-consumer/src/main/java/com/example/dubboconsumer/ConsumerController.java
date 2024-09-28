@@ -18,7 +18,7 @@ public class ConsumerController {
     @Autowired
     private ConsumerProcessor processor;
 
-    @Value("${v2java.config:defaultV2java}")
+    @Value("${ppp:defaultV2java}")
     private String config;
 
     @Autowired
