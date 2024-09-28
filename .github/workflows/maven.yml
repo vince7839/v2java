@@ -45,3 +45,7 @@ jobs:
         docker build . --file ./dubbo-consumer/Dockerfile --tag registry.cn-hangzhou.aliyuncs.com/lwx_img_repo/dubbo-consumer:${{ github.sha }} --build-arg COMMIT_ID=${{ github.sha }}
         # 推送镜像到镜像仓库
         docker push registry.cn-hangzhou.aliyuncs.com/lwx_img_repo/dubbo-consumer:${{ github.sha }}
+        # 使用Dockerfile构建镜像
+        docker build . --file ./nacos-config-listener/Dockerfile --tag registry.cn-hangzhou.aliyuncs.com/lwx_img_repo/nacos-config-listener:${{ github.sha }} --build-arg COMMIT_ID=${{ github.sha }}
+        # 推送镜像到镜像仓库
+        docker push registry.cn-hangzhou.aliyuncs.com/lwx_img_repo/nacos-config-listener:${{ github.sha }}
