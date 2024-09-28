@@ -4,6 +4,9 @@ spring:
       server-addr: mse-0b4b8640-nacos-ans.mse.aliyuncs.com:8848
       config:
         file-extension: properties
+        namespace: public
+        group: DEFAULT_GROUP
+        prefix: dubbo-consumer
 
   profiles:
     active: prod
