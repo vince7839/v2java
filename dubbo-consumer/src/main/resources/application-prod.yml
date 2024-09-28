@@ -3,7 +3,7 @@ spring:
     nacos:
       server-addr: mse-0b4b8640-nacos-ans.mse.aliyuncs.com
       config:
-        name: dubbo-consumer-prod.properties
+        server-addr: mse-0b4b8640-nacos-ans.mse.aliyuncs.com
 
 server:
   port: 8082
