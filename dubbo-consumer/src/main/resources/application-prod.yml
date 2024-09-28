@@ -2,6 +2,12 @@ spring:
   cloud:
     nacos:
       server-addr: mse-0b4b8640-nacos-ans.mse.aliyuncs.com:8848
+      config:
+        file-extension: properties
+
+  profiles:
+    active: prod
+
 
 server:
   port: 8082
