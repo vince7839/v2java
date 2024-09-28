@@ -13,7 +13,7 @@ public class ListenController {
     @Value("${configKey:ddd}")
     private String config;
 
-    @GetMapping("/v2java/config")
+    @GetMapping("/v2java/listen/config")
     public ResponseEntity test(){
         return ResponseEntity.ok(config);
     }
