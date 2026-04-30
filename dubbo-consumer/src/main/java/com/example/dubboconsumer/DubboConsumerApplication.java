@@ -6,6 +6,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication
 @EnableDiscoveryClient
+//启动类
 public class DubboConsumerApplication {
 
     public static void main(String[] args) {
